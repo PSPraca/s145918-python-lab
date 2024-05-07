@@ -43,7 +43,18 @@ def rzuty() -> tuple[str, str]:
 print(rzuty())
 
 # zadanie 6
-def caig(*s: str) -> str:
+def ciag(*s: str) -> str:
     if len(s) < 1:
         return ''
+    return sorted(s)
 
+print(ciag("ghf", "sfgsdfg", "fasdsf", "fawead", "awedfs"))
+
+# zadanie 7
+def weird_sum(**kwargs) -> int:
+    result = 0 
+    for key in kwargs.keys():
+        result += kwargs[key]
+    return result
+
+print(weird_sum(f=243, p=3425, g=123))
