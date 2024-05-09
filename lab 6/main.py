@@ -2,6 +2,7 @@ import csv
 
 from datetime import datetime
 from random import randint
+from itertools import permutations
 
 # zadanie 1
 pl = []
@@ -90,4 +91,55 @@ def reverse_words(s: str):
 
 # zdanie 7
 def cards():
-    pass
+    colors = ['kier', 'karo', 'trefl', 'pik']
+    stack = []
+    for color in colors:
+        stack += [x + ' ' + color for x in ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'j', 'q', 'k', 'a']]
+    players = ['p1', 'p2', 'p3', 'p4']
+    hands = {}
+    for p in players:
+        hands |= {p: []}
+        for i in range(5):            
+            added_card = stack[randint(0, len(stack) - 1)]
+            hands[p] += [added_card]
+            stack.remove(added_card)
+        print(hands[p])
+
+# cards()
+
+# zadanie 8
+def emails(domain: str) -> None:
+    with open('names.txt', 'r') as f:
+        names = f.readlines()
+    for name in names:
+        name = name.replace('\n', '')
+        mail = name.lower().replace('ą', 'a').replace('c', 'ć').replace('ń', 'n').replace('ł', 'l').replace('ś', 's').replace('ę', 'e').replace('ó', 'o').replace(' ', '.') + '@' + domain
+        print(f"{name}, {mail}")
+
+# emails('gmail.com')
+
+# zadanie 9
+with open('hasla.txt', 'r') as f:
+    words = f.readlines()
+
+words = [x.replace('\n', '') for x in words]
+chosen_word = words[randint(0, len(words) - 1)]
+
+print('haslo:')
+print(''.join(['_' for _ in chosen_word]))
+
+revealed_letters = []
+
+while True:
+    c = input('Podaj literę bądź całę hasło:\n')
+    if len(c) > 1:
+        if chosen_word.lower() == c.lower():
+            print("gratulacje, wygrałeś")
+            break
+        if c.lower() not in chosen_word.lower():
+            print('w haśle nie występuje ta litera')
+        elif c.lower() not in revealed_letters:
+            revealed_letters.append(c.lower())
+            print(['_' if x.lower() not in revealed_letters else x for x in chosen_word])
+        if len(revealed_letters) == len(set(chosen_word.replace(' ', ''))):
+            break
