@@ -5,31 +5,31 @@ from random import randint
 from itertools import permutations
 
 # zadanie 1
-pl = []
-de = []
-with open("zamowienia.csv", "r") as f:
-    f_reader = csv.reader(f, delimiter=';')
-    for row in f_reader:
-        if 'Kraj' in row:
-            continue
-        row[-1] = row[-1][:-4]
-        row[-1].replace(',', '.')
-        row[-1].replace(' ', '')
-        row[2] = datetime.strftime(datetime.strptime(row[2], "%d.%m.%Y"), "%Y-%m-%d")
-        if row[0] == "Polska":
-            pl.append(row)
-        else:
-            de.append(row)
+# pl = []
+# de = []
+# with open("zamowienia.csv", "r") as f:
+#     f_reader = csv.reader(f, delimiter=';')
+#     for row in f_reader:
+#         if 'Kraj' in row:
+#             continue
+#         row[-1] = row[-1][:-4]
+#         row[-1].replace(',', '.')
+#         row[-1].replace(' ', '')
+#         row[2] = datetime.strftime(datetime.strptime(row[2], "%d.%m.%Y"), "%Y-%m-%d")
+#         if row[0] == "Polska":
+#             pl.append(row)
+#         else:
+#             de.append(row)
 
-with open('zamowienia_polska.csv', 'w') as f:
-    f_writer = csv.writer(f)
-    for row in pl:
-        f_writer.writerow(row)
+# with open('zamowienia_polska.csv', 'w') as f:
+#     f_writer = csv.writer(f)
+#     for row in pl:
+#         f_writer.writerow(row)
 
-with open('zamowienia_niemcy.csv', 'w') as f:
-    f_writer = csv.writer(f)
-    for row in de:
-        f_writer.writerow(row)
+# with open('zamowienia_niemcy.csv', 'w') as f:
+#     f_writer = csv.writer(f)
+#     for row in de:
+#         f_writer.writerow(row)
 
 # zadanie 2
 def join_files(new_file, *files):
@@ -126,9 +126,9 @@ words = [x.replace('\n', '') for x in words]
 chosen_word = words[randint(0, len(words) - 1)]
 
 print('haslo:')
-print(''.join(['_' for _ in chosen_word]))
+print(''.join(['_' if x != ' ' else x for x in chosen_word]))
 
-revealed_letters = []
+revealed_letters = [' ']
 
 while True:
     c = input('Podaj literę bądź całę hasło:\n')
@@ -136,10 +136,14 @@ while True:
         if chosen_word.lower() == c.lower():
             print("gratulacje, wygrałeś")
             break
-        if c.lower() not in chosen_word.lower():
-            print('w haśle nie występuje ta litera')
-        elif c.lower() not in revealed_letters:
-            revealed_letters.append(c.lower())
-            print(['_' if x.lower() not in revealed_letters else x for x in chosen_word])
-        if len(revealed_letters) == len(set(chosen_word.replace(' ', ''))):
-            break
+        else:
+            print('niestety to nie jest hasło')
+    if c.lower() not in chosen_word.lower():
+        print('w haśle nie występuje ta litera')
+    elif c.lower() not in revealed_letters:
+        revealed_letters.append(c.lower())
+    else:
+        print("podawałeś już tą literę")
+    if len(revealed_letters) == len(set(chosen_word.replace(' ', ''))):
+        break
+    print(''.join(['_' if x.lower() not in revealed_letters else x for x in chosen_word]))
